@@ -14,7 +14,7 @@ class UpdateBook
 
     public function handle($request, $id)
     {
-        $book = Book::findOrFail($id);
+        $book = Book::find($id);
         $book->update($request->all());
         $book->authors()->sync($request->author_ids);
         return $book;

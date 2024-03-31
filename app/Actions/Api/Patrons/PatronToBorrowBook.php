@@ -19,7 +19,7 @@ class PatronToBorrowBook
         $patron = Patron::find($request->patronId);
         $book = Book::find($request->bookId);
 
-        if ($book && $book->is_available) {
+        if ($book && $patron && $book->is_available) {
             
             $dueBackDate = now()->addWeeks(2);
 

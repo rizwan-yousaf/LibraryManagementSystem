@@ -15,6 +15,9 @@ class UpdateBook
     public function handle($request, $id)
     {
         $book = Book::find($id);
+        if (!$book) {
+            return $book;
+        }
         $book->update($request->all());
         $book->authors()->sync($request->author_ids);
         return $book;
@@ -32,9 +35,13 @@ class UpdateBook
 
     public function jsonResponse($book, Request $request)
     {
-        if ($request->wantsJson()) {
-            return response()->json(['success' => true, 'message' => 'Book Updated Successfully', 'data' => new BookResource($book)], 200);
+        if($book){
+            if ($request->wantsJson()) {
+                return response()->json(['success' => true, 'message' => 'Book Updated Successfully', 'data' => new BookResource($book)], 200);
+            }
+            return new BookResource($book);
         }
-        return new BookResource($book);
+        return response()->json(['success' => false, 'message' => 'Book not found'], 404);
+       
     }
 }
